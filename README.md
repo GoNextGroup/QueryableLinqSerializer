@@ -2,7 +2,7 @@
 Use SimpleInjector as a DI Container.
 
 Additional classes:
-
+````
 public static class InvokeExtensionMethods
 {
   public static async Task<object> DynamicInvokeAsync(this MethodInfo @this, object obj, params object[] parameters)
@@ -20,7 +20,7 @@ public static class InvokeExtensionMethods
     return resultProperty.GetValue(task);
   }
 }
-
+````
 public class GuidShortGuidConverter : JsonConverter
 {
   public override bool CanConvert(Type objectType)
