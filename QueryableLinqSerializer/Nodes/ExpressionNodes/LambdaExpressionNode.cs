@@ -47,7 +47,18 @@ namespace QueryableLinqSerializer.Nodes.ExpressionNodes
             Console.WriteLine(NodeType);
             var parameterExpressions = Parameters.Select(e => e.FromNode<ParameterExpression>(container)).ToList();
 
-            var lambdaExpression = Expression.Lambda(Type.FromNode(), Body.FromNode(container), TailCall, parameterExpressions);
+            var restoredBody = Body.FromNode(container);
+            var bodyParameters = restoredBody.GetNodes().OfType<ParameterExpression>().ToArray();
+
+            for (var i = 0; i < parameterExpressions.Count; ++i)
+            {
+                var matchingParameter = bodyParameters.Where(p => p.Name == parameterExpressions[i].Name && p.Type == parameterExpressions[i].Type).ToArray();
+                if (matchingParameter.Length == 1)
+                    parameterExpressions[i] = matchingParameter.First();
+            }
+
+
+            var lambdaExpression = Expression.Lambda(Type.FromNode(), restoredBody, TailCall, parameterExpressions);
             return lambdaExpression;
             ////////return Expression.Lambda(Body.FromNode(container), parameterExpressions);
 

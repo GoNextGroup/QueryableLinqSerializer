@@ -24,10 +24,6 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
     [Serializable, DataContract(Name = "QueryableConstantExpression")]
     public class QueryableConstantExpressionNode : ExpressionNode
     {
-        public static object inputCollection = null;
-        public static object outputCollection = null;
-
-
         [DataMember(Name = nameof(Value))]
         public virtual object Value { get; set; }
 
@@ -51,41 +47,28 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
             {
                 var constantExpressionGenericTypes = expression.Value.GetType().GetGenericArguments();
                 GenericTypes = constantExpressionGenericTypes.Select(e => typeParser.Parse(e)).ToList();
-
                 
                 var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToList)).MakeGenericMethod(constantExpressionGenericTypes);
-                Value = asEnumerableMethod.Invoke(null, new object[] { expression.Value });
-                
+                Value = asEnumerableMethod.Invoke(null, new object[] { expression.Value });                
 
                  IsEntityQueryable = true;
             }
             else
             {
-
-
-                //     <-- THIS CODE COULD BE USED INSTEAD OF VISITOR USAGE FOR CAPTURE EXTERNAL VARIABLES
-
-                /*
-                var lambdaExpression = Expression.Lambda(expression);
-                var dele = lambdaExpression.Compile();
-                Value =  dele.DynamicInvoke();
-                */
-
                 Console.WriteLine("{0}", expression.Value.GetType());
                 expression.Value.GetType().GetInterfaces().ForEach(e => Console.WriteLine(e.ToString()));
 
                 var valueType = expression.Value?.GetType();
                 if (valueType != null && valueType.IsGenericType) { GenericTypes = valueType.GetGenericArguments().Select(e => typeParser.Parse(e)).ToList(); }
 
+                /*
                 var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.AsEnumerable)).MakeGenericMethod(valueType.GetGenericArguments());
                 Value = asEnumerableMethod.Invoke(null, new object[] { expression.Value });
-
-                inputCollection = Value;
-
-
-                /*
-                Value = expression.Value;
                 */
+
+                
+                Value = expression.Value;
+                
 
                 IsEntityQueryable = false;
             }
@@ -120,19 +103,6 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                 
                 Console.WriteLine("{0}", Value.GetType());
                 Value.GetType().GetInterfaces().ForEach(e => Console.WriteLine(e.ToString()));
-
-                /*
-                Expression<Func<object, object>> test = (e) => e;
-                var testResult = test.Compile().Invoke(Value);
-                */
-                /*
-                var lambdaExpression = Expression.Lambda(Expression.Constant(0));
-                var dele = lambdaExpression.Compile();
-                Value = dele.DynamicInvoke();
-                */
-
-                outputCollection = asEnumerabled;
-
                 
                 if (Value is IEnumerable<string>)
                 {
@@ -156,12 +126,6 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                 }
 
                 return Expression.Constant(asAsyncEnumerabled); //Type != null ? Expression.Constant(asAsyncEnumerabled, Type.FromNode()) : Expression.Constant(asAsyncEnumerabled);
-            }
-            */
-            /*
-            if (Value is String)
-            {
-                return Guid.TryParse((string)Value, out var guid) ? Expression.Constant(guid) : Expression.Constant(Value);
             }
             */
 
