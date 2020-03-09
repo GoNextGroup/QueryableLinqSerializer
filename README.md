@@ -20,7 +20,7 @@ public static class InvokeExtensionMethods
     return resultProperty.GetValue(task);
   }
 }
-````
+
 public class GuidShortGuidConverter : JsonConverter
 {
   public override bool CanConvert(Type objectType)
@@ -39,10 +39,10 @@ public class GuidShortGuidConverter : JsonConverter
     writer.WriteValue(((Guid)value).ToString("D"));
   }
 }
-
+````
 
 Usage:
-
+````
 var container = new Container();
 var expressionSettings = new ExpressionParserSettings()
 {
@@ -117,5 +117,6 @@ var generatedDeserializedExpression = newtonsoftDeserialized.FromNode(container)
 var toListAsyncMethodInfo = typeof(EntityFrameworkQueryableExtensions).GetMethod(nameof(EntityFrameworkQueryableExtensions.ToListAsync)).MakeGenericMethod(typeof(string));
 var restoredResult = await toListAsyncMethodInfo.InvokeAsync(null, new object[] { providerAsync.CreateQuery(generatedDeserializedExpression), default(CancellationToken) }).ConfigureAwait(false);
 
+````
 It's an alpha version, it still doesn't work properly.
 
