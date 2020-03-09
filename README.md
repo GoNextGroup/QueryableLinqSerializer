@@ -109,6 +109,9 @@ var jsonSerializerSettings = new JsonSerializerSettings()
 jsonSerializerSettings.Converters.Add(new GuidShortGuidConverter());
 jsonSerializerSettings.Error += (sender, e) => Console.WriteLine("{0}   {1}", e.ErrorContext.Error.Message, e.ErrorContext.Path);
 
+var parser = container.GetInstance<IExpressionParser>();
+var result = parser.Parse(tstEspression);
+
 var newtonsoftSerialized = JsonConvert.SerializeObject(result, jsonSerializerSettings);
 var newtonsoftDeserialized = JsonConvert.DeserializeObject(newtonsoftSerialized, jsonSerializerSettings) as ExpressionNode;
 
