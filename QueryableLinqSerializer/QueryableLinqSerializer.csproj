@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <SkipPostSharp>True</SkipPostSharp>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Nodes\AuxiliaryNodes\ParameterInfoNode.cs" />
+    <Compile Remove="Nodes\ConstructorInfoNode.cs" />
+    <Compile Remove="Nodes\ElementInitNodeList.cs" />
+    <Compile Remove="Nodes\ExpressionNode.cs" />
+    <Compile Remove="Nodes\ExpressionNodeList.cs" />
+    <Compile Remove="Nodes\ExpressionNodes\QueryableModifiedConstantExpressionNode.cs" />
+    <Compile Remove="Nodes\FieldInfoNode.cs" />
+    <Compile Remove="Nodes\GenericExpressionNode.cs" />
+    <Compile Remove="Nodes\MemberBindingNode.cs" />
+    <Compile Remove="Nodes\MemberBindingNodeList.cs" />
+    <Compile Remove="Nodes\MemberInfoNode.cs" />
+    <Compile Remove="Nodes\MemberInfoNodeList.cs" />
+    <Compile Remove="Nodes\MemberListBindingNode.cs" />
+    <Compile Remove="Nodes\MemberMemberBindingNode.cs" />
+    <Compile Remove="Nodes\MemberNode.cs" />
+    <Compile Remove="Nodes\MethodInfoNode.cs" />
+    <Compile Remove="Nodes\Node.cs" />
+    <Compile Remove="Nodes\tst.cs" />
+    <Compile Remove="QueryableVisitor.cs" />
+    <Compile Remove="tst.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SimpleInjector" Version="4.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\EFCoreDataModel\EFCoreDataModel\EFCoreDataModel.csproj" />
+  </ItemGroup>
+
+</Project>
