@@ -26,7 +26,7 @@ namespace QueryableLinqSerializer.Nodes.MemberBindingNodes
         public override MemberBinding FromNode([Optional] Container container)
         {
             Console.WriteLine(BindingType);
-            return Expression.ListBind(Member.FromNode(container), Initializers.Select(e => e.FromNode(container)));
+            return Expression.ListBind(Member.FromNode(container), Initializers.Select(e => e.FromNode(container)).ToList());
         }
         public override ICollection<Type> GetKnownTypes([Optional] Container container)
         {

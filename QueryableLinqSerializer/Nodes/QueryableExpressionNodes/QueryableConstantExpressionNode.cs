@@ -39,10 +39,6 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
             //var parser = container.GetInstance<IExpressionParser>();
             var typeParser = container.GetInstance<ITypeParser>();
 
-            //Value = expression.Value.GetType().IsAssignableFrom(typeof(Expression)) ? parser.Parse(expression.Value as Expression) : expression.Value;
-            //Value = expression.Value;
-
-            //if (Value.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
             if (expression.Value.GetType().IsGenericType && expression.Value.GetType().GetGenericTypeDefinition() == typeof(EntityQueryable<>))
             {
                 var constantExpressionGenericTypes = expression.Value.GetType().GetGenericArguments();
@@ -83,10 +79,10 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                 var queryProvider = container.GetInstance<IQueryProvider>();
 
                 var entityQueryableType = typeof(EntityQueryable<>).MakeGenericType(GenericTypes.Select(e => e.FromNode()).ToArray());
-                var  generatedEntity = Activator.CreateInstance(entityQueryableType, queryProvider, Expression.Constant(Value));//, QExpression.FromNode(container));
+                var  generatedEntity = Activator.CreateInstance(entityQueryableType, queryProvider, Expression.Constant(Value, Value.GetType()));//, QExpression.FromNode(container));
 
                 ///Expression.Constant(Value);//(ConstantExpression)generatedExpression;///Expression.Constant(generatedEntity); //Type != null ? Expression.Constant(generatedEntity, Type.FromNode()) : Expression.Constant(generatedEntity);
-                return Expression.Constant(generatedEntity); 
+                return Expression.Constant(generatedEntity, generatedEntity.GetType()); 
             }
 
             if (Value is string)
@@ -111,7 +107,7 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                     //return Expression.Constant(((IEnumerable<string>)Value).All(e => Guid.TryParse(e, out _)) ? ((IEnumerable<string>)Value).Select(e => Guid.Parse(e)).ToList() : Value);
                 }
 
-                return Expression.Constant(asEnumerabled);  //Type != null ? Expression.Constant(asEnumerabled, Type.FromNode()) : Expression.Constant(asEnumerabled);
+                return Expression.Constant(asEnumerabled, asEnumerabled.GetType());  //////Type != null ? Expression.Constant(asEnumerabled, Type.FromNode()) : Expression.Constant(asEnumerabled);
             }
             
             /*   <------------------------------------------------ Need to realize correctly for IAsyncEnumerable

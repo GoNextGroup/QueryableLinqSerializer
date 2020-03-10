@@ -57,12 +57,7 @@ namespace QueryableLinqSerializer.Nodes.ExpressionNodes
                     parameterExpressions[i] = matchingParameter.First();
             }
 
-
-            var lambdaExpression = Expression.Lambda(Type.FromNode(), restoredBody, TailCall, parameterExpressions);
-            return lambdaExpression;
-            ////////return Expression.Lambda(Body.FromNode(container), parameterExpressions);
-
-            //return ReturnType != default ? Expression.Lambda(/*ReturnType*/ Type, Body.FromNode(), TailCall, parameterExpressions) : Expression.Lambda(Body.FromNode(), TailCall, parameterExpressions);
+            return Expression.Lambda(Type.FromNode(), restoredBody, TailCall, parameterExpressions);
         }
         public override ICollection<Type> GetKnownTypes([Optional] Container container)
         {

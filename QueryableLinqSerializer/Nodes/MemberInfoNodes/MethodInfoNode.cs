@@ -49,8 +49,7 @@ namespace QueryableLinqSerializer.Nodes.MemberInfoNodes
         }
         public override MemberInfo FromNode([Optional] Container container)
         {
-            var concreteMethodInfos = DeclaringType.FromNode().GetMethods().Where(e => e.Name == Name).ToList();
-            var concreteMethodInfo = concreteMethodInfos.FirstOrDefault();
+            var concreteMethodInfo = DeclaringType.FromNode().GetMethods().Where(e => e.Name == Name).FirstOrDefault();
 
             return IsGenericMethod ? concreteMethodInfo.MakeGenericMethod(GenericArguments.Select(e => e.FromNode()).ToArray()) : concreteMethodInfo;
         }

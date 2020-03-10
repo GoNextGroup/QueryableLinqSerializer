@@ -31,7 +31,6 @@ namespace QueryableLinqSerializer.Core_Classes.Nodes
 
             NodeType = expression.NodeType;
             Type = typeParser.Parse(expression.Type);
-
         }
         public override ICollection<Type> GetKnownTypes([Optional]Container container)
         {

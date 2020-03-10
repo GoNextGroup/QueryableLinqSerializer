@@ -73,11 +73,6 @@ namespace QueryableLinqSerializer.Extensions
             }
         }
 
-        /// <summary>
-        /// Gets the nodes of an expression tree.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <returns></returns>
         internal static IEnumerable<Expression> GetNodes(this Expression expression)
         {
             foreach (var node in expression.GetLinkNodes())
@@ -88,12 +83,6 @@ namespace QueryableLinqSerializer.Extensions
             yield return expression;
         }
 
-        /// <summary>
-        /// Gets the nodes of an expression tree of given expression type.
-        /// </summary>
-        /// <typeparam name="TExpression">The type of the expression.</typeparam>
-        /// <param name="expression">The expression.</param>
-        /// <returns></returns>
         internal static IEnumerable<TExpression> GetNodes<TExpression>(this Expression expression) where TExpression : Expression
         {
             return expression.GetNodes().OfType<TExpression>();
