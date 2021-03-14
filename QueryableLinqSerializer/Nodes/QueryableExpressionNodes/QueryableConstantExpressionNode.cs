@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using QueryableLinqSerializer.Extensions;
 using MoreLinq.Extensions;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
 {
