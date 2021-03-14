@@ -7,6 +7,6 @@ namespace QueryableLinqSerializer.Settings
 {
     public class QueryableExpressionParserSettings : ExpressionParserSettings
     {
-        //public IQueryProvider QueryProvider { get; set; }
+        public IQueryProvider QueryProvider { get; set; }
     }
 }

@@ -5,11 +5,13 @@ using QueryableLinqSerializer.Core_Interfaces;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace QueryableLinqSerializer.Nodes.ExpressionNodes
 {
@@ -29,10 +31,11 @@ namespace QueryableLinqSerializer.Nodes.ExpressionNodes
         public override Expression FromNode([Optional] Container container)
         {
             Console.WriteLine(NodeType);
+
             return NodeType switch
             {
-                ExpressionType.NewArrayBounds => Expression.NewArrayBounds(Type.FromNode(), Expressions.Select(e => e.FromNode(container))),
-                ExpressionType.NewArrayInit   => Expression.NewArrayInit(Type.FromNode(), Expressions.Select(e => e.FromNode(container))),
+                ExpressionType.NewArrayBounds => Expression.NewArrayBounds(Type.FromNode().GetElementType(), Expressions.Select(e => e.FromNode(container))),
+                ExpressionType.NewArrayInit   => Expression.NewArrayInit(Type.FromNode().GetElementType(), Expressions.Select(e => e.FromNode(container))),
                 _                             => throw new NotImplementedException()
             };
         }

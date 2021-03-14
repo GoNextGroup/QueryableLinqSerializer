@@ -12,21 +12,10 @@ namespace QueryableLinqSerializer.Parsers
 {
     public abstract class ActionFactory<T>
     {
-        /*
-        static ActionFactory() 
-        {
-            var defaultSetting = new ParserFactorySettings() { };
-            DefaultFactory = new ActionFactory(defaultSetting);
-
-            DefaultFactory.AddActivator<IExpressionParser>(typeof(ExpressionParser));
-        } 
-        */
-
         protected static ActionFactory<T> defaultFactory;
         protected IDictionary<T, Type> activators;
-        //protected BaseSettings baseSettings;
 
-        public ActionFactory()//[Optional]BaseSettings baseSettings)
+        public ActionFactory()
         {
             Initialize();
         }
@@ -34,7 +23,6 @@ namespace QueryableLinqSerializer.Parsers
         {
             activators = new ConcurrentDictionary<T, Type>();
         }
-
         
         public virtual V Create<V>(T key, params object[] arguments) where V:class
         {
@@ -43,8 +31,6 @@ namespace QueryableLinqSerializer.Parsers
         }
         public virtual object Create(T key, params object[] arguments) => Create<object>(key, arguments);
 
-
-        //public virtual void AddActivator<V>(T concreteType) => activators.Add(typeof(V), concreteType);
         public virtual void AddActivator(T underlying, Type concreteType) => activators.Add(underlying, concreteType);
         public virtual void ChangeActivator(T underlying, Type concreteType)
         {   

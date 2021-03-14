@@ -1,58 +1,51 @@
-﻿using QueryableLinqSerializer.Core_Classes.Nodes;
-using QueryableLinqSerializer.Core_Interfaces;
+﻿using QueryableLinqSerializer.Core_Interfaces;
+using QueryableLinqSerializer.Nodes.AuxiliaryNodes;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace QueryableLinqSerializer.Nodes.AuxiliaryNodes
 {
     [Serializable, DataContract(Name = "ParameterInfo")]
-    public class ParameterInfoNode : IGenerator<ParameterInfo>, ITypeCollector
+    public class ParameterInfoNode
     {
         [DataMember(Name = nameof(Name))]
-        public string? Name { get; set; }
-
+        public virtual string? Name { get; set; }
         [DataMember(Name = nameof(ParameterType))]
-        public Type ParameterType { get; set; }
+        public virtual TypeNode ParameterType { get; set;  }
+        //public virtual MemberInfo Member { get; }  --> possible this property needs to check in nested lists of the Expression Tree
+        //public virtual bool HasDefaultValue { get; }
+        //public virtual IEnumerable<CustomAttributeData> CustomAttributes { get; }
+        //public virtual ParameterAttributes Attributes { get; }
+        //public virtual object? DefaultValue { get; }
 
-        [DataMember(Name = nameof(Member))]
-        public MemberInfoNode Member { get; set; }
-
-        [DataMember(Name = nameof(HasDefaultValue))]
-        public bool HasDefaultValue { get; set; }
-
-        [DataMember(Name = nameof(DefaultValue))]
-        public object? DefaultValue { get; set; }
-        
-
-        public ParameterInfoNode(ParameterInfo parameterInfo, Container container)
+        protected ParameterInfoNode() : base() { Console.WriteLine("ParameterInfo created"); }
+        public ParameterInfoNode(ParameterInfo parameter, Container container)
         {
-            var parser = container.GetInstance<IMemberInfoParser>();
+            var typeParser = container.GetInstance<ITypeParser>();
 
-            ParameterType = parameterInfo.ParameterType;
-            HasDefaultValue = parameterInfo.HasDefaultValue;
-            DefaultValue = parameterInfo.DefaultValue;
+            ParameterType = typeParser.Parse(parameter.ParameterType);
+            Name = parameter.Name;
+        }
+        public virtual ICollection<Type> GetKnownTypes([Optional] Container container)
+        {
+            Console.WriteLine("Parameter Info Node KnownType");
 
-            Member = parameterInfo.Member != null ? parser.Parse(parameterInfo.Member) : null;
+            return new Type[] { this.GetType(), this?.ParameterType?.FromNode() };
         }
 
-        public ICollection<Type> GetKnownTypes()
+        public virtual ParameterInfo FromNode([Optional] Container container) => null;
+        /*
+        public virtual ParameterInfo FromNode([Optional] Container container)
         {
-            var methodTypes = new Type[] { Member.DeclaringType };
-            var totalTypes = methodTypes.Concat(Member.GetKnownTypes()).ToList();
-
-            return totalTypes;
+            return DeclaringType.FromNode().GetFields().Single(e => e.FieldType == FieldType.FromNode() && e.Name == Name);
         }
+        */
 
-        public ParameterInfo FromNode()
-        {
-            GetTypeBuilder();
 
-           return ParameterType.
-        }
     }
 }

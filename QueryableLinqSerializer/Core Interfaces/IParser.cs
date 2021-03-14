@@ -20,26 +20,8 @@ namespace QueryableLinqSerializer.Core_Interfaces
         S Parse<S>(V elem) where S:class => Parse(elem) as S;
     }
 
-    public interface IExpressionParser : IParser<ExpressionNode, Expression, ExpressionParserSettings>//, ITypeCollection
-    {
-        /*
-        ExpressionNode ParseNode(Expression expression);
-        T ParseNode<T>(Expression expression) where T : ExpressionNode;
-        */
-
-        //public ExpressionParserSettings ExpressionParserSettings { get; }
-    }
-
-    public interface IMemberBingingParser : IParser<MemberBindingNode, MemberBinding, MemberBindingParserSettings>//, ITypeCollection
-    {
-        //public MemberBindingParserSettings MemberBindingnParserSettings { get; }
-    }
-
-    public interface IMemberInfoParser : IParser<MemberInfoNode, MemberInfo, MemberInfoParserSettings>//, ITypeCollection
-    {
-    }
-
-    public interface ITypeParser : IParser<TypeNode, Type, TypeParserSettings>//, ITypeCollection
-    {
-    }
+    public interface IExpressionParser : IParser<ExpressionNode, Expression, ExpressionParserSettings> { }
+    public interface IMemberBingingParser : IParser<MemberBindingNode, MemberBinding, MemberBindingParserSettings> { }
+    public interface IMemberInfoParser : IParser<MemberInfoNode, MemberInfo, MemberInfoParserSettings> { }
+    public interface ITypeParser : IParser<TypeNode, Type, TypeParserSettings> { }
 }

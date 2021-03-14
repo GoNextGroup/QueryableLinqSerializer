@@ -10,13 +10,10 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using QueryableLinqSerializer.Nodes.AuxiliaryNodes;
-using System.Collections;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using QueryableLinqSerializer.Extensions;
-using EFCoreDataModel.DataClasses.Users.Base;
 using MoreLinq.Extensions;
 
 namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
@@ -39,7 +36,7 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
             //var parser = container.GetInstance<IExpressionParser>();
             var typeParser = container.GetInstance<ITypeParser>();
 
-            if (expression.Value.GetType().IsGenericType && expression.Value.GetType().GetGenericTypeDefinition() == typeof(EntityQueryable<>))
+            if ((expression.Value?.GetType().IsGenericType ?? false) && expression.Value?.GetType().GetGenericTypeDefinition() == typeof(EntityQueryable<>))
             {
                 var constantExpressionGenericTypes = expression.Value.GetType().GetGenericArguments();
                 GenericTypes = constantExpressionGenericTypes.Select(e => typeParser.Parse(e)).ToList();
@@ -55,12 +52,13 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                 expression.Value.GetType().GetInterfaces().ForEach(e => Console.WriteLine(e.ToString()));
 
                 var valueType = expression.Value?.GetType();
-                if (valueType != null && valueType.IsGenericType) { GenericTypes = valueType.GetGenericArguments().Select(e => typeParser.Parse(e)).ToList(); }
+                if (valueType?.IsGenericType ?? false) { GenericTypes = valueType.GetGenericArguments().Select(e => typeParser.Parse(e)).ToList(); }
 
-                /*
-                var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.AsEnumerable)).MakeGenericMethod(valueType.GetGenericArguments());
-                Value = asEnumerableMethod.Invoke(null, new object[] { expression.Value });
-                */
+                if (expression.Value != null ? expression.Value.GetType().IsGenericEnumerable() : false)
+                {
+                    var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToList)).MakeGenericMethod(valueType.GetGenericArguments());
+                    Value = asEnumerableMethod.Invoke(null, new object[] { expression.Value });
+                }
 
                 
                 Value = expression.Value;
@@ -85,30 +83,35 @@ namespace QueryableLinqSerializer.Nodes.QueryableExpressionNodes
                 return Expression.Constant(generatedEntity, generatedEntity.GetType()); 
             }
 
+            /*
             if (Value is string)
             {
                 return Expression.Constant(Guid.TryParse((string)Value, out var guid) ? guid : Value);
             }
+            */
 
-            if (Value.GetType().IsGenericEnumerable())
+            /*
+            if ((Value?.GetType().IsGenericEnumerable() ?? false) && !(Value is string))
             {
 
                 //var asEnumerableMethod = typeof(Queryable).GetMethods().Where(f => f.IsGenericMethod && f.Name == nameof(Queryable.AsQueryable)).First().MakeGenericMethod(GenericTypes.Select(e => e.FromNode()).ToArray());
-                var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.AsEnumerable)).MakeGenericMethod(GenericTypes.Select(e => e.FromNode()).ToArray());
+                var asEnumerableMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToList)).MakeGenericMethod(GenericTypes.Select(e => e.FromNode()).ToArray());
                 var asEnumerabled = asEnumerableMethod.Invoke(null, new object[] { Value });
                 
                 Console.WriteLine("{0}", Value.GetType());
-                Value.GetType().GetInterfaces().ForEach(e => Console.WriteLine(e.ToString()));
+                Value.GetType().GetInterfaces().ForEach(e => Console.WriteLine(e.ToString()));                
                 
-                if (Value is IEnumerable<string>)
-                {
-                    asEnumerabled = ((IEnumerable<string>)asEnumerabled).All(e => Guid.TryParse(e, out _)) ? ((IEnumerable<string>)asEnumerabled).Select(e => Guid.Parse(e)).ToList() : asEnumerabled;
-
-                    //return Expression.Constant(((IEnumerable<string>)Value).All(e => Guid.TryParse(e, out _)) ? ((IEnumerable<string>)Value).Select(e => Guid.Parse(e)).ToList() : Value);
-                }
+                //if (Value is IEnumerable<string>)
+                //{
+                //    asEnumerabled = ((IEnumerable<string>)asEnumerabled).All(e => Guid.TryParse(e, out _)) ? ((IEnumerable<string>)asEnumerabled).Select(e => Guid.Parse(e)).ToList() : asEnumerabled;
+                //
+                //    //return Expression.Constant(((IEnumerable<string>)Value).All(e => Guid.TryParse(e, out _)) ? ((IEnumerable<string>)Value).Select(e => Guid.Parse(e)).ToList() : Value);
+                //}
+                
 
                 return Expression.Constant(asEnumerabled, asEnumerabled.GetType());  //////Type != null ? Expression.Constant(asEnumerabled, Type.FromNode()) : Expression.Constant(asEnumerabled);
             }
+            */
             
             /*   <------------------------------------------------ Need to realize correctly for IAsyncEnumerable
             if (Value.GetType().IsASyncGenericEnumerable())

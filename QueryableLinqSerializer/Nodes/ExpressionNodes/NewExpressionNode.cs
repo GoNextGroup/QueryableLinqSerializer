@@ -35,13 +35,14 @@ namespace QueryableLinqSerializer.Nodes.ExpressionNodes
             var expressionParser = container.GetInstance<IExpressionParser>();
             var memberInfoParser = container.GetInstance<IMemberInfoParser>();
 
-            Arguments = expression.Arguments.Select(e => expressionParser.Parse(e)).ToList();
+            Arguments = expression?.Arguments.Select(e => expressionParser.Parse(e)).ToList();
             Constructor = memberInfoParser.Parse<ConstructorInfoNode>(expression.Constructor);
-            Members = expression.Members.Select(e => memberInfoParser.Parse(e)).ToList();
+            Members = expression?.Members?.Select(e => memberInfoParser.Parse(e)).ToList();
         }
         public override Expression FromNode([Optional] Container container)
         {
             Console.WriteLine(NodeType);
+
             if (Constructor != default)
             {
                 if (Arguments?.Count > 0)

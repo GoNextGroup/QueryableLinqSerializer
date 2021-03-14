@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryableLinqSerializer", "QueryableLinqSerializer\QueryableLinqSerializer.csproj", "{44091A8F-6139-4E41-A6E2-2FA660713510}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteLinqExecution", "RemoteLinqExecution\RemoteLinqExecution.csproj", "{910ED927-4A11-495D-B7A4-79BADAFB879E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{44091A8F-6139-4E41-A6E2-2FA660713510}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44091A8F-6139-4E41-A6E2-2FA660713510}.Release|x64.ActiveCfg = Release|x64
 		{44091A8F-6139-4E41-A6E2-2FA660713510}.Release|x64.Build.0 = Release|x64
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Debug|x64.Build.0 = Debug|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Release|x64.ActiveCfg = Release|Any CPU
+		{910ED927-4A11-495D-B7A4-79BADAFB879E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
